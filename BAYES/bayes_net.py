@@ -1,7 +1,5 @@
 # BAYES/bayes_net.py
-from typing import Dict, List, Tuple, Any, Optional
-import math
-import random
+from typing import Dict, List, Tuple, Any
 
 class Node:
     def __init__(self, name: str, parents: List[str], cpt: Dict[Tuple[Any,...], float]):

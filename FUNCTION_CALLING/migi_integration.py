@@ -3,11 +3,12 @@ MIGI_7G Function Calling Integration
 Integruje system wywoływania funkcji z głównym systemem MIGI_7G
 """
 
-import asyncio
+
 import json
 import logging
 from typing import Dict, List, Any, Optional
-from FUNCTION_CALLING.engine import function_calling_engine, ToolCall, ToolResult
+from FUNCTION_CALLING.engine import function_calling_engine, ToolCall, tool
+from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +154,7 @@ class MIGIFunctionCallingIntegration:
             })
         
         if tool_calls:
-            response_content = f"Pozwól mi sprawdzić to dla Ciebie używając dostępnych narzędzi..."
+            response_content = "Pozwól mi sprawdzić to dla Ciebie używając dostępnych narzędzi..."
             return {
                 "role": "assistant",
                 "content": response_content,
@@ -192,9 +193,6 @@ class MIGIFunctionCallingIntegration:
         logger.info("🧹 Conversation history cleared")
 
 # Przykładowe narzędzia specyficzne dla MIGI_7G
-
-from FUNCTION_CALLING.engine import tool
-from pydantic import BaseModel, Field
 
 class MIGIStatusRequest(BaseModel):
     """Request model for MIGI system status"""

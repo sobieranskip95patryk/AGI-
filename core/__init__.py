@@ -1,0 +1,1 @@
+# Core MIGI_7G system components

@@ -9,7 +9,7 @@ Odpowiada za utrzymanie spójności osobowości i kontrolę nadrzędnej dyrektyw
 
 import time
 import logging
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Any
 from dataclasses import dataclass
 from enum import Enum
 import json
@@ -427,7 +427,7 @@ def test_meta_meta_cognition():
     ]
     
     # Introspekcja i wyrównanie
-    aligned_plan = engine.perform_introspect_and_align(test_plan)
+    engine.perform_introspect_and_align(test_plan)
     
     # Analiza koherencji
     coherence = engine.analyze_cognitive_coherence()

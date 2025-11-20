@@ -12,6 +12,9 @@ aiohttp==3.9.0
 psutil==5.9.6
 pytz==2023.3
 
+# Health monitoring
+flask==3.0.0
+
 # Scientific computing
 numpy==1.24.3
 scipy==1.11.4

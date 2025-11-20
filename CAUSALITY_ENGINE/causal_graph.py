@@ -21,8 +21,7 @@ import networkx as nx
 from typing import Dict, List, Any, Optional, Tuple, Set
 from dataclasses import dataclass
 from enum import Enum
-import uuid
-from collections import defaultdict
+
 import itertools
 
 # Konfiguracja logowania
@@ -495,7 +494,7 @@ class CounterfactualReasoner:
             query=query,
             result=counterfactual_prob,
             confidence_interval=(ci_lower, ci_upper),
-            explanation=f"Counterfactual analysis using twin network method",
+            explanation="Counterfactual analysis using twin network method",
             causal_path=self._trace_counterfactual_path(query),
             assumptions=["Structural causal model", "No interference", 
                         "Deterministic structural equations"],
@@ -740,7 +739,7 @@ class CausalityEngine:
         if result:
             logger.info(f"✅ Causal query completed: {result.result:.3f} (CI: {result.confidence_interval})")
         else:
-            logger.info(f"❌ Causal query failed")
+            logger.info("❌ Causal query failed")
         
         return result
     
@@ -863,13 +862,13 @@ def demo_causality_engine():
     # Inicjalizacja
     engine = CausalityEngine()
     
-    print(f"\n📊 Initial Status:")
+    print("\n📊 Initial Status:")
     status = engine.get_causality_status()
     print(f"   Causal Graphs: {len(status['causal_graphs'])}")
     print(f"   Demo Graph: {status['causal_graphs']['demo_medical']['variables']} variables, {status['causal_graphs']['demo_medical']['edges']} edges")
     
     # Test 1: Do-Intervention
-    print(f"\n🎯 TEST 1: DO-INTERVENTION - P(heart_disease | do(smoking=0))")
+    print("\n🎯 TEST 1: DO-INTERVENTION - P(heart_disease | do(smoking=0))")
     intervention_query = CausalQuery(
         query_type=InterventionType.DO_INTERVENTION,
         target_variable="heart_disease",
@@ -884,7 +883,7 @@ def demo_causality_engine():
         print(f"   Causal Path: {' → '.join(result1.causal_path)}")
     
     # Test 2: Counterfactual Analysis
-    print(f"\n🔮 TEST 2: COUNTERFACTUAL - What if patient hadn't smoked?")
+    print("\n🔮 TEST 2: COUNTERFACTUAL - What if patient hadn't smoked?")
     counterfactual_query = CausalQuery(
         query_type=InterventionType.COUNTERFACTUAL,
         target_variable="heart_disease",
@@ -900,7 +899,7 @@ def demo_causality_engine():
         print(f"   Explanation: {result2.explanation}")
     
     # Test 3: Effect Identification
-    print(f"\n🔍 TEST 3: CAUSAL IDENTIFICATION")
+    print("\n🔍 TEST 3: CAUSAL IDENTIFICATION")
     effects = [
         ("smoking", "heart_disease"),
         ("exercise", "cholesterol"),
@@ -915,7 +914,7 @@ def demo_causality_engine():
             print(f"      Formula: {formula[:50]}...")
     
     # Test 4: Graph Properties
-    print(f"\n🕸️ TEST 4: CAUSAL GRAPH ANALYSIS")
+    print("\n🕸️ TEST 4: CAUSAL GRAPH ANALYSIS")
     demo_graph = engine.graphs["demo_medical"]
     
     # D-separation test
@@ -927,7 +926,7 @@ def demo_causality_engine():
     print(f"   Backdoor paths (smoking → heart_disease): {len(backdoor_paths)}")
     
     # Finalne statystyki
-    print(f"\n📊 FINAL STATISTICS")
+    print("\n📊 FINAL STATISTICS")
     final_status = engine.get_causality_status()
     print(f"   Total queries: {final_status['total_queries']}")
     print(f"   Interventions: {final_status['causality_stats']['interventions']['count']}")
@@ -935,15 +934,15 @@ def demo_causality_engine():
     print(f"   Success rate: {final_status['causality_stats']['interventions']['success_rate']:.3f}")
     
     # Testy diagnostyczne
-    print(f"\n🔧 DIAGNOSTIC TESTS")
+    print("\n🔧 DIAGNOSTIC TESTS")
     diagnostics = engine.run_diagnostic_tests()
     print(f"   Overall status: {diagnostics['overall_status']}")
     print(f"   Intervention test: {'✅' if diagnostics['intervention_test'] else '❌'}")
     print(f"   Counterfactual test: {'✅' if diagnostics['counterfactual_test'] else '❌'}")
     print(f"   Identification test: {'✅' if diagnostics['identification_test'] else '❌'}")
     
-    print(f"\n✅ Causality Engine Demo completed successfully!")
-    print(f"🌐 Pearl Level-3 Reasoning: OPERATIONAL")
+    print("\n✅ Causality Engine Demo completed successfully!")
+    print("🌐 Pearl Level-3 Reasoning: OPERATIONAL")
     
     return engine
 

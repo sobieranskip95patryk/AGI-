@@ -141,8 +141,8 @@ async def demonstrate_function_calling():
     # Wyświetl dostępne narzędzia
     tools = migi_function_calling.get_available_tools()
     print(f"\n📋 Available Tools ({len(tools)}):")
-    for tool in tools:
-        print(f"  • {tool['name']}: {tool['description']}")
+    for tool_item in tools:
+        print(f"  • {tool_item['name']}: {tool_item['description']}")
     
     # Przykłady użycia
     test_messages = [

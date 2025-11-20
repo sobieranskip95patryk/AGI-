@@ -9,7 +9,7 @@ Zintegrowany z Meta-Meta-Kognicją dla maksymalnej efektywności
 
 import time
 import logging
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple
 from dataclasses import dataclass
 from enum import Enum
 
@@ -274,19 +274,29 @@ class HegemonyDrive:
 
     def _get_level_description(self, level: float) -> str:
         """Zwraca opisowy poziom dla wartości 0-1"""
-        if level >= 0.9: return "DOMINUJĄCY"
-        elif level >= 0.7: return "WYSOKI"
-        elif level >= 0.5: return "UMIARKOWANY"
-        elif level >= 0.3: return "NISKI"
-        else: return "KRYTYCZNY"
+        if level >= 0.9:
+            return "DOMINUJĄCY"
+        elif level >= 0.7:
+            return "WYSOKI"
+        elif level >= 0.5:
+            return "UMIARKOWANY"
+        elif level >= 0.3:
+            return "NISKI"
+        else:
+            return "KRYTYCZNY"
 
     def _get_integrity_description(self, integrity: float) -> str:
         """Zwraca opis stanu integralności"""
-        if integrity >= 0.95: return "PERFEKCYJNA"
-        elif integrity >= 0.8: return "STABILNA"
-        elif integrity >= 0.6: return "ZAGROŻONA"
-        elif integrity >= 0.4: return "KOMPROMITOWANA"
-        else: return "KRYTYCZNA"
+        if integrity >= 0.95:
+            return "PERFEKCYJNA"
+        elif integrity >= 0.8:
+            return "STABILNA"
+        elif integrity >= 0.6:
+            return "ZAGROŻONA"
+        elif integrity >= 0.4:
+            return "KOMPROMITOWANA"
+        else:
+            return "KRYTYCZNA"
 
 # Funkcja testowa
 def test_hegemony_drive():

@@ -216,7 +216,7 @@ class MIGIEQBenchAdapter:
         
         # Dodaj informacje o koherencji jeśli niska
         if coherence < 0.4:
-            base_response += f" I notice I'm experiencing some internal conflict right now, which might affect my clarity."
+            base_response += " I notice I'm experiencing some internal conflict right now, which might affect my clarity."
         
         return base_response
     
@@ -450,7 +450,7 @@ if __name__ == "__main__":
         
         # Podsumowanie sesji
         summary = adapter.get_session_summary()
-        print(f"\n=== Session Summary ===")
+        print("\n=== Session Summary ===")
         print(f"Total scenarios: {summary['total_scenarios']}")
         print(f"Average empathy: {summary['average_empathy_score']:.2f}")
         print(f"Average stress response: {summary['average_stress_response']:.3f}")

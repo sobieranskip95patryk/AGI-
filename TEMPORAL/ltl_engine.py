@@ -5,7 +5,7 @@ Nie jest to pełna implementacja LTL — to lekki, rozszerzalny moduł
 do walidacji sekwencji zdarzeń i integrowania z Planner/HTN.
 """
 
-from typing import List, Dict, Any, Iterable
+from typing import Dict, Any, Iterable
 
 class LTLError(Exception):
     pass

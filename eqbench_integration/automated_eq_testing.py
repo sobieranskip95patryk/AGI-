@@ -8,12 +8,12 @@ import asyncio
 import json
 import time
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List
 from dataclasses import dataclass, asdict
 from pathlib import Path
 import random
 import statistics
-from concurrent.futures import ThreadPoolExecutor
+
 import itertools
 
 from migi_eqbench_adapter import MIGIEQBenchAdapter, EQBenchConfig
@@ -281,7 +281,7 @@ class AutomatedEQTester:
         with open(sweep_file, 'w', encoding='utf-8') as f:
             json.dump(sweep_summary, f, indent=2, default=str)
         
-        logger.info(f"🏆 Parameter sweep completed!")
+        logger.info("🏆 Parameter sweep completed!")
         logger.info(f"   Best combination: {sweep_summary['best_combination']}")
         logger.info(f"   Best score: {sweep_summary['best_score']:.3f}")
         logger.info(f"   Results saved to: {sweep_file}")
@@ -411,7 +411,7 @@ class AutomatedEQTester:
         with open(stress_file, 'w', encoding='utf-8') as f:
             json.dump(stress_results, f, indent=2, default=str)
         
-        logger.info(f"⚡ Stress test completed!")
+        logger.info("⚡ Stress test completed!")
         logger.info(f"   Scenarios completed: {stress_results['completed_scenarios']}")
         logger.info(f"   Success rate: {stress_results['success_rate']:.1%}")
         logger.info(f"   Avg response time: {stress_results['average_response_time']:.2f}s")

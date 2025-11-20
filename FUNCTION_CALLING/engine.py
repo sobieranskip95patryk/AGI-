@@ -11,14 +11,26 @@ Funkcjonalności:
 """
 
 import asyncio
-import json
+
 import logging
 import inspect
 from typing import Dict, List, Any, Callable, Optional, Union, Type
 from dataclasses import dataclass
 from pydantic import BaseModel, Field, ValidationError
-from abc import ABC, abstractmethod
+
 import time
+
+# Import Structured Outputs system
+try:
+    from .structured_outputs import (
+        StructuredOutputEngine, 
+        StructuredOutputConfig,
+
+        create_structured_tool
+    )
+    STRUCTURED_OUTPUTS_AVAILABLE = True
+except ImportError:
+    STRUCTURED_OUTPUTS_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -81,15 +93,15 @@ class ToolDefinition:
             
             # Try to infer type from annotation
             if param.annotation != inspect.Parameter.empty:
-                if param.annotation == int:
+                if param.annotation is int:
                     param_schema["type"] = "integer"
-                elif param.annotation == float:
+                elif param.annotation is float:
                     param_schema["type"] = "number"
-                elif param.annotation == bool:
+                elif param.annotation is bool:
                     param_schema["type"] = "boolean"
-                elif param.annotation == list:
+                elif param.annotation is list:
                     param_schema["type"] = "array"
-                elif param.annotation == dict:
+                elif param.annotation is dict:
                     param_schema["type"] = "object"
             
             properties[param_name] = param_schema
@@ -107,11 +119,19 @@ class ToolDefinition:
 class FunctionCallingEngine:
     """Główny silnik wywoływania funkcji dla MIGI_7G"""
     
-    def __init__(self):
+    def __init__(self, structured_outputs_config: Optional['StructuredOutputConfig'] = None):
         self.tools: Dict[str, ToolDefinition] = {}
         self.parallel_calling_enabled = True
         self.max_concurrent_calls = 5
         self.execution_timeout = 30.0
+        
+        # Initialize Structured Outputs if available
+        if STRUCTURED_OUTPUTS_AVAILABLE:
+            self.structured_engine = StructuredOutputEngine(structured_outputs_config)
+            logger.info("✅ Structured Outputs engine initialized")
+        else:
+            self.structured_engine = None
+            logger.warning("⚠️ Structured Outputs not available")
         
     def register_tool(
         self,
@@ -263,6 +283,68 @@ class FunctionCallingEngine:
                 results.append(result)
             
             return results
+    
+    # =========================================
+    # 🧠 STRUCTURED OUTPUTS METHODS
+    # =========================================
+    
+    def register_structured_tool(self, 
+                                name: str,
+                                description: str,
+                                input_schema: Type[BaseModel],
+                                output_schema: Type[BaseModel]):
+        """Register a tool with structured input/output validation"""
+        if not STRUCTURED_OUTPUTS_AVAILABLE:
+            raise RuntimeError("Structured Outputs not available")
+            
+        def decorator(func):
+            # Create structured function with validation
+            structured_func = create_structured_tool(
+                name, description, input_schema, output_schema
+            )(func)
+            
+            # Register with parameters from input schema
+            self.register_tool(
+                name=name,
+                function=structured_func,
+                description=description,
+                parameters_schema=input_schema.model_json_schema(),
+                pydantic_model=input_schema
+            )
+            
+            return structured_func
+            
+        return decorator
+    
+    def parse_with_schema(self, data: Union[str, dict], schema_name: str) -> Any:
+        """Parse data using registered schema"""
+        if not self.structured_engine:
+            raise RuntimeError("Structured Outputs not available")
+            
+        return self.structured_engine.parse_with_schema(data, schema_name)
+    
+    def validate_output(self, 
+                       data: Union[str, dict], 
+                       schema: Type[BaseModel]) -> tuple[bool, Optional[str]]:
+        """Validate output data against schema"""
+        if not self.structured_engine:
+            return True, None  # Skip validation if not available
+            
+        return self.structured_engine.validate_data(data, schema)
+    
+    def list_schemas(self) -> List[str]:
+        """List available structured output schemas"""
+        if not self.structured_engine:
+            return []
+            
+        return self.structured_engine.list_schemas()
+    
+    def get_schema_info(self, schema_name: str) -> Dict[str, Any]:
+        """Get information about a specific schema"""
+        if not self.structured_engine:
+            return {"error": "Structured Outputs not available"}
+            
+        return self.structured_engine.get_schema_info(schema_name)
 
 # Globalna instancja silnika
 function_calling_engine = FunctionCallingEngine()

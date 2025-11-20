@@ -20,8 +20,9 @@ Status: PRODUCTION - Complete AGI Pipeline Demo
 """
 
 import sys
-import os
+import time
 from pathlib import Path
+from typing import Dict, Any
 
 # Dodaj ścieżki do modułów AGI
 repo_root = Path(__file__).parent
@@ -31,16 +32,12 @@ sys.path.append(str(repo_root))
 try:
     from PERCEPTION import Symbolizer, DummyVisionModel, evidence_from_symbols, weighted_sampling_for_soft_evidence
     from BAYES import BayesNet, Node, query_marginal
-    from CAUSALITY_ENGINE import CausalGraph, DoCalculus
+    from CAUSALITY_ENGINE import CausalGraph
     from TEMPORAL import TemporalPlanner, Action
     MODULES_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some modules not available: {e}")
     MODULES_AVAILABLE = False
-
-import random
-import time
-from typing import Dict, Any, List
 
 class PerceptionDemoSystem:
     """
@@ -198,7 +195,7 @@ class PerceptionDemoSystem:
                     action_prob = query_marginal(self.bayes_net, "RequiresAction", evidence)
                     medical_prob = marginals.get("MedicalEmergency", 0.0)
                     security_prob = marginals.get("SecurityAlert", 0.0)
-                except:
+                except Exception:
                     action_prob = marginals.get("RequiresAction", 0.0)
                     medical_prob = marginals.get("MedicalEmergency", 0.0)
                     security_prob = marginals.get("SecurityAlert", 0.0)
@@ -310,7 +307,7 @@ def run_perception_demo():
     for action, count in action_counts.items():
         print(f"   {action}: {count} times")
         
-    print(f"\n✅ PERCEPTION DEMO COMPLETED SUCCESSFULLY")
+    print("\n✅ PERCEPTION DEMO COMPLETED SUCCESSFULLY")
     print("🧠 Full pipeline working: Sensors → Symbols → Bayes → Causality → Actions")
     
     return results

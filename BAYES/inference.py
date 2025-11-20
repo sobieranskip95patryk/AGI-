@@ -1,5 +1,5 @@
 # BAYES/inference.py
-from typing import Dict, Any, List
+from typing import Dict, List
 from .bayes_net import BayesNet
 import random
 

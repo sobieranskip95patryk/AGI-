@@ -3,8 +3,8 @@ import json
 import os
 import time
 import uuid
-from typing import Dict, Any, Optional
-from dataclasses import dataclass, asdict
+from typing import Dict, Any
+from dataclasses import dataclass
 from datetime import datetime
 
 SNAPSHOT_DIR = "snapshots"
@@ -86,7 +86,7 @@ def _validate_coherence(state: Dict[str, Any]) -> Dict[str, Any]:
     """
     coherence = state.get("coherence", 0)
     stress = state.get("stress_level", 0)
-    cortisol = state.get("cortisol_ppm", 0)
+    # cortisol level is not used in current version
     
     # Detekcja fałszywej koherencji
     masking_risk = 0.0

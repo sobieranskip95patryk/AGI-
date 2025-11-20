@@ -8,7 +8,7 @@ import json
 import time
 import logging
 import asyncio
-from typing import Dict, Any, Optional, List, Union
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 from dataclasses import dataclass
 import importlib.util

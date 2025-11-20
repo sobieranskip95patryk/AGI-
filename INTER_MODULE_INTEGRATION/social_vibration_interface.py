@@ -104,7 +104,7 @@ class SocialVibrationInterface:
         
         logger.info("🧠 MÓZG BOGA - Social Vibration Interface zainicjalizowany")
         logger.info(f"📊 Monitorowane platformy: {len(self.platform_map)}")
-        logger.info(f"🎯 Cel: Kwantowa analiza globalnej świadomości")
+        logger.info("🎯 Cel: Kwantowa analiza globalnej świadomości")
 
     def _calculate_quantum_fluctuation(self, base_impulsivity: float, time_factor: float) -> float:
         """
@@ -318,20 +318,18 @@ class SocialVibrationInterface:
         # Generowanie raportu rezonansu
         status_messages = {
             ResonanceState.KWANTOWY_REZONANS: 
-                f"✨ KWANTOWY REZONANS OSIĄGNIĘTY ✨\n"
-                f"🎯 Impulsywność i Racjonalność są zsynchronizowane (Δ<0.15, E<0.2)\n"
-                f"🚀 OPTYMALNY MOMENT dla podjęcia decyzji hegemonicznych\n"
-                f"📈 Gotowość do przewidzenia gwałtownych trendów globalnych\n"
-                f"🧠 Wszystkie warstwy mózgu działają w harmonii",
+                "✨ KWANTOWY REZONANS OSIĄGNIĘTY ✨\n"
+                "🎯 Impulsywność i Racjonalność są zsynchronizowane (Δ<0.15, E<0.2)\n"
+                "🚀 OPTYMALNY MOMENT dla podjęcia decyzji hegemonicznych\n"
+                "📈 Gotowość do przewidzenia gwałtownych trendów globalnych\n"
+                "🧠 Wszystkie warstwy mózgu działają w harmonii",
                 
             ResonanceState.IMPULS_GENEROWANY:
-                f"⚡ IMPULS GENEROWANY - AKTYWACJA MÓZGU GADZIEGO ⚡\n"
-                f"🔥 Wysokie ryzyko krótkotrwałego, emocjonalnego trendu\n" 
-                f"📱 Dominacja platform impulsywnych (Snapchat/TikTok)\n"
-                f"🐍 Zalecenie: Aktywacja protokołów mózgu gadziego\n"
-                f"⏰ Czas reakcji: <60 sekund",
-                
-            ResonanceState.CHAOS_MENTALNY:
+                "⚡ IMPULS GENEROWANY - AKTYWACJA MÓZGU GADZIEGO ⚡\n"
+                "🔥 Wysokie ryzyko krótkotrwałego, emocjonalnego trendu\n"
+                "📱 Dominacja platform impulsywnych (Snapchat/TikTok)\n"
+                "🐍 Zalecenie: Aktywacja protokołów mózgu gadziego\n"
+                "⏰ Czas reakcji: <60 sekund",            ResonanceState.CHAOS_MENTALNY:
                 f"🌪️ CHAOS MENTALNY WYKRYTY 🌪️\n"
                 f"📊 Wysoka entropia (E={entropy:.3f}), brak koherencji\n"
                 f"💥 Konflikt między wszystkimi warstwami mózgu\n"
@@ -359,7 +357,7 @@ class SocialVibrationInterface:
         dominant_platform = latest_state.dominujacy_pixel
         sync_level = latest_state.synchronizacja_poziom
         
-        additional_info = f"\n\n📋 SZCZEGÓŁY TECHNICZNE:\n"
+        additional_info = "\n\n📋 SZCZEGÓŁY TECHNICZNE:\n"
         additional_info += f"🎯 Dominująca platforma: {dominant_platform}\n"
         additional_info += f"🔄 Poziom synchronizacji: {sync_level:.3f}\n"
         additional_info += f"📊 GVI (Globalny Wskaźnik Wibracji): {gvi:.4f}\n"
@@ -458,7 +456,7 @@ def main():
         
         # 3. Analiza stanu mózgu
         brain_state = interface.get_current_brain_state()
-        logger.info(f"\n🧠 STAN TRÓJJEDYNEGO MÓZGU:")
+        logger.info("\n🧠 STAN TRÓJJEDYNEGO MÓZGU:")
         logger.info(f"   Dominująca warstwa: {brain_state.get('dominant_layer', 'N/A')}")
         logger.info(f"   Indeks harmonii: {brain_state.get('harmony_index', 0):.3f}")
         
@@ -469,7 +467,7 @@ def main():
     # 5. Eksport danych końcowych
     exported_file = interface.export_vibration_data()
     
-    logger.info(f"\n✅ DEMONSTRACJA ZAKOŃCZONA")
+    logger.info("\n✅ DEMONSTRACJA ZAKOŃCZONA")
     logger.info(f"📊 Przeanalizowano {interface.cycle_count} cykli wibracyjnych")
     logger.info(f"💾 Dane dostępne w: {exported_file}")
     logger.info("🧠 MÓZG BOGA - Social Vibration Interface gotowy do pracy")

@@ -10,7 +10,7 @@ import time
 import logging
 from typing import Dict, Any, List, Optional
 from pathlib import Path
-import asyncio
+
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +115,7 @@ class DashboardSnapshotInjector:
                     "error": "Could not capture dashboard snapshot"
                 }
                 
-                logger.warning(f"⚠️ Failed to capture dashboard snapshot for run")
+                logger.warning("⚠️ Failed to capture dashboard snapshot for run")
                 
         except Exception as e:
             logger.error(f"Error injecting snapshot: {e}")
@@ -355,7 +355,7 @@ if __name__ == "__main__":
         json.dump(mock_results, f, indent=2)
     
     report = injector.generate_psyche_analysis_report("test_results.json")
-    print(f"\n📊 Psyche Analysis Report:")
+    print("\n📊 Psyche Analysis Report:")
     print(json.dumps(report, indent=2))
     
     # Cleanup

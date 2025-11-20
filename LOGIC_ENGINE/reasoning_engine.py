@@ -17,7 +17,7 @@ Status: IMPLEMENTATION PHASE 1 - ROI Critical Path
 import logging
 import time
 from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from enum import Enum
 import uuid
 
@@ -993,12 +993,12 @@ def demo_logic_engine():
     # Inicjalizacja
     engine = LogicEngine()
     
-    print(f"\n📊 Initial Status:")
+    print("\n📊 Initial Status:")
     status = engine.get_reasoning_status()
     print(f"   Knowledge Base: {status['knowledge_base']['facts_count']} facts, {status['knowledge_base']['rules_count']} rules")
     
     # Test 1: Dedukcja
-    print(f"\n🎯 TEST 1: DEDUCTIVE REASONING")
+    print("\n🎯 TEST 1: DEDUCTIVE REASONING")
     deduction_result = engine.reason("full_reasoning_available(true)", ReasoningType.DEDUCTION)
     if deduction_result:
         print(f"   Result: {deduction_result.conclusion}")
@@ -1006,21 +1006,21 @@ def demo_logic_engine():
         print(f"   Proof chain: {len(deduction_result.proof_chain)} steps")
     
     # Test 2: Abdukcja
-    print(f"\n🔍 TEST 2: ABDUCTIVE REASONING")
+    print("\n🔍 TEST 2: ABDUCTIVE REASONING")
     abduction_result = engine.reason("system_slow,memory_high,cpu_overload", ReasoningType.ABDUCTION)
     if abduction_result:
         print(f"   Best explanation: {abduction_result.conclusion}")
         print(f"   Confidence: {abduction_result.confidence:.3f}")
     
     # Test 3: Planowanie HTN
-    print(f"\n📋 TEST 3: HTN PLANNING")
+    print("\n📋 TEST 3: HTN PLANNING")
     planning_result = engine.reason("solve_performance_issue", ReasoningType.HTN_PLANNING)
     if planning_result:
         print(f"   Plan: {planning_result.conclusion}")
         print(f"   Steps: {len(planning_result.proof_chain)}")
     
     # Dodanie dodatkowej wiedzy
-    print(f"\n📚 ADDING CUSTOM KNOWLEDGE")
+    print("\n📚 ADDING CUSTOM KNOWLEDGE")
     new_facts = [
         {"predicate": "performance_issue", "arguments": ["detected"], "confidence": 0.9},
         {"predicate": "user_complaint", "arguments": ["slow_response"], "confidence": 0.8}
@@ -1037,14 +1037,14 @@ def demo_logic_engine():
     engine.add_knowledge(facts=new_facts, rules=new_rules)
     
     # Test z nową wiedzą
-    print(f"\n🧠 TEST WITH NEW KNOWLEDGE")
+    print("\n🧠 TEST WITH NEW KNOWLEDGE")
     urgent_result = engine.reason("urgent_action_required(true)", ReasoningType.DEDUCTION)
     if urgent_result:
         print(f"   Conclusion: {urgent_result.conclusion}")
         print(f"   Confidence: {urgent_result.confidence:.3f}")
     
     # Finalne statystyki
-    print(f"\n📊 FINAL STATISTICS")
+    print("\n📊 FINAL STATISTICS")
     final_status = engine.get_reasoning_status()
     print(f"   Total inferences: {final_status['total_inferences']}")
     print(f"   Deductions: {final_status['reasoning_stats']['deduction']['count']}")
@@ -1052,11 +1052,11 @@ def demo_logic_engine():
     print(f"   Plans: {final_status['reasoning_stats']['planning']['count']}")
     
     # Testy diagnostyczne
-    print(f"\n🔧 DIAGNOSTIC TESTS")
+    print("\n🔧 DIAGNOSTIC TESTS")
     diagnostics = engine.run_diagnostic_tests()
     print(f"   Overall status: {diagnostics['overall_status']}")
     
-    print(f"\n✅ Logic Engine Demo completed successfully!")
+    print("\n✅ Logic Engine Demo completed successfully!")
     return engine
 
 if __name__ == "__main__":
