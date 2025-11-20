@@ -1,7 +1,7 @@
 # MIGI_7G + Dashboard Kalibracyjny + EQ-Bench + Function Calling Requirements
 
 # Core dependencies
-asyncio-mqtt==0.13.0
+asyncio-mqtt==0.16.2
 websockets==11.0.3
 pydantic==2.5.0
 fastapi==0.104.1
