@@ -57,7 +57,7 @@ sqlite3  # Built-in
 sqlalchemy==2.0.23
 
 # Time zone handling
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
 
 # Configuration management
 python-dotenv==1.0.0
