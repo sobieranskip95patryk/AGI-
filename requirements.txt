@@ -63,7 +63,7 @@ python-dateutil==2.8.2
 python-dotenv==1.0.0
 
 # Encryption (for secure tools)
-cryptography==41.0.8
+cryptography==46.0.3
 
 # System monitoring
 cpuinfo==9.0.0
