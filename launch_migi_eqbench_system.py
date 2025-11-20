@@ -26,6 +26,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Import Function Calling system
+try:
+    from FUNCTION_CALLING.migi_integration import migi_function_calling
+    FUNCTION_CALLING_AVAILABLE = True
+    logger.info("🔧 Function Calling system loaded")
+except ImportError as e:
+    FUNCTION_CALLING_AVAILABLE = False
+    logger.warning(f"⚠️ Function Calling system not available: {e}")
+
 class MIGIEQBenchSystemLauncher:
     """Główny launcher systemu MIGI + EQ-Bench"""
     
@@ -249,6 +258,11 @@ class MIGIEQBenchSystemLauncher:
 🛑 ZATRZYMANIE SYSTEMU:
    Ctrl+C lub python launch_migi_eqbench_system.py --shutdown
 
+🔧 FUNCTION CALLING:
+   Dostępne: {'✅' if FUNCTION_CALLING_AVAILABLE else '❌'}
+   Narzędzia: {len(migi_function_calling.get_available_tools()) if FUNCTION_CALLING_AVAILABLE else 0}
+   Demo: python FUNCTION_CALLING/demo.py
+
 {"="*60}
 Press Ctrl+C to shutdown the system
 {"="*60}
@@ -353,6 +367,46 @@ Press Ctrl+C to shutdown the system
         except Exception as e:
             logger.error(f"❌ EQ-Bench failed: {e}")
             raise
+    
+    async def run_function_calling_test(self, test_messages: List[str] = None):
+        """Uruchamia test Function Calling"""
+        if not FUNCTION_CALLING_AVAILABLE:
+            logger.warning("⚠️ Function Calling not available")
+            return
+        
+        logger.info("🔧 Starting Function Calling test")
+        
+        default_messages = [
+            "What's the current system info?",
+            "Calculate 2 + 2 * 3", 
+            "What time is it?",
+            "Get MIGI system status"
+        ]
+        
+        messages = test_messages or default_messages
+        
+        try:
+            for i, message in enumerate(messages, 1):
+                logger.info(f"🧪 Test {i}: {message}")
+                
+                result = await migi_function_calling.process_message_with_tools(message)
+                
+                logger.info(f"✅ Response: {result['response']['content']}")
+                
+                if result['tool_results']:
+                    for tool_result in result['tool_results']:
+                        if tool_result.success:
+                            logger.info(f"🔧 Tool result: {tool_result.content}")
+                        else:
+                            logger.error(f"❌ Tool error: {tool_result.error}")
+                
+                await asyncio.sleep(1)  # Krótka przerwa między testami
+            
+            logger.info("✅ Function Calling test completed")
+            
+        except Exception as e:
+            logger.error(f"❌ Function Calling test failed: {e}")
+            raise
 
 def setup_signal_handlers(launcher):
     """Ustawia handlery sygnałów dla graceful shutdown"""
@@ -376,6 +430,8 @@ async def main():
                        help="Only check dependencies and exit")
     parser.add_argument("--shutdown", action="store_true",
                        help="Shutdown any running instances")
+    parser.add_argument("--function-test", action="store_true",
+                       help="Run Function Calling test and exit")
     
     args = parser.parse_args()
     
@@ -404,6 +460,11 @@ async def main():
             await asyncio.sleep(5)  # Czas na inicjalizację
             await launcher.run_eq_benchmark(args.benchmark, args.output)
             await launcher.shutdown_system()
+            return 0
+        
+        elif args.function_test:
+            # Test Function Calling
+            await launcher.run_function_calling_test()
             return 0
         
         else:
