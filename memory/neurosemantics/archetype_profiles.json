@@ -1,0 +1,233 @@
+{
+  "archetypes": {
+    "hero": {
+      "name": "Bohater",
+      "description": "Archetyp odwagi, przywództwa i poświęcenia dla wyższego celu",
+      "dominant_primitives": ["POSWIECENIE", "POTEGA_PRAWDZIWEJ_WLADZY", "NADZIEJA_WYTRWALOSCI"],
+      "suppressed_primitives": ["BRAK_WIARY_NADZIEI", "ODOSOBNIENIE_SAMOTNOSC"],
+      "reconsolidation_bias": 0.8,
+      "stress_resistance": 0.9,
+      "decision_style": "decisive_action",
+      "energy_level": "high",
+      "social_orientation": "group_focused",
+      "time_preference": "future_oriented",
+      "risk_tolerance": "high",
+      "creativity_level": "moderate",
+      "emotional_stability": "high"
+    },
+    
+    "sage": {
+      "name": "Mędrzec", 
+      "description": "Archetyp mądrości, zrozumienia i poszukiwania prawdy",
+      "dominant_primitives": ["ZROZUMIENIE", "SZCZYPTA_INTELIGENCJI", "PRECYZYJNOSC_POJMOWANIA"],
+      "suppressed_primitives": ["NAMIETNOSC_POZADANIA", "POZADANIE_SZCZYPTA"],
+      "reconsolidation_bias": 0.6,
+      "stress_resistance": 0.7,
+      "decision_style": "analytical_deliberation",
+      "energy_level": "moderate",
+      "social_orientation": "selective_connection",
+      "time_preference": "present_focused",
+      "risk_tolerance": "low",
+      "creativity_level": "high",
+      "emotional_stability": "very_high"
+    },
+    
+    "lover": {
+      "name": "Kochanek",
+      "description": "Archetyp miłości, pasji i głębokich relacji międzyludzkich",
+      "dominant_primitives": ["PIERWIASTEK_MILOSCI", "ALGORYTM_ZAKOCHANIA", "ALGORYTM_MILOSCI"],
+      "suppressed_primitives": ["ODOSOBNIENIE_SAMOTNOSC", "BRAK_WIARY_NADZIEI"],
+      "reconsolidation_bias": 0.9,
+      "stress_resistance": 0.4,
+      "decision_style": "heart_centered",
+      "energy_level": "high",
+      "social_orientation": "relationship_focused",
+      "time_preference": "present_focused", 
+      "risk_tolerance": "moderate",
+      "creativity_level": "high",
+      "emotional_stability": "low"
+    },
+    
+    "innocent": {
+      "name": "Niewinny",
+      "description": "Archetyp czystości, optymizmu i wiary w dobro świata",
+      "dominant_primitives": ["WIARA_JAKO_TAKA", "NADZIEJA_WYTRWALOSCI", "SZCZYPTA_MAGII"],
+      "suppressed_primitives": ["BRAK_WIARY_NADZIEI", "POTEGA_PRAWDZIWEJ_WLADZY"],
+      "reconsolidation_bias": 0.7,
+      "stress_resistance": 0.3,
+      "decision_style": "intuitive_trust",
+      "energy_level": "moderate",
+      "social_orientation": "trusting_open",
+      "time_preference": "present_focused",
+      "risk_tolerance": "low",
+      "creativity_level": "moderate",
+      "emotional_stability": "moderate"
+    },
+    
+    "explorer": {
+      "name": "Badacz",
+      "description": "Archetyp ciekawości, odkrywania i poszukiwania nowych doświadczeń",
+      "dominant_primitives": ["POMYSL_IDEA", "WYOBRAZNIA_LOGIKA", "SZCZYPTA_INTELIGENCJI"],
+      "suppressed_primitives": ["ODOSOBNIENIE_SAMOTNOSC"],
+      "reconsolidation_bias": 0.5,
+      "stress_resistance": 0.6,
+      "decision_style": "exploratory_experimentation",
+      "energy_level": "high",
+      "social_orientation": "adventure_seeking",
+      "time_preference": "future_oriented",
+      "risk_tolerance": "very_high",
+      "creativity_level": "very_high",
+      "emotional_stability": "moderate"
+    },
+    
+    "rebel": {
+      "name": "Buntownik",
+      "description": "Archetyp rewolucji, przekształcania i walki z systemem",
+      "dominant_primitives": ["POTEGA_PRAWDZIWEJ_WLADZY", "NAMIETNOSC_POZADANIA", "BRAK_WIARY_NADZIEI"],
+      "suppressed_primitives": ["POSWIECENIE", "WIARA_JAKO_TAKA"],
+      "reconsolidation_bias": 0.4,
+      "stress_resistance": 0.8,
+      "decision_style": "disruptive_action",
+      "energy_level": "very_high",
+      "social_orientation": "system_challenging",
+      "time_preference": "present_focused",
+      "risk_tolerance": "very_high",
+      "creativity_level": "high",
+      "emotional_stability": "low"
+    },
+    
+    "magician": {
+      "name": "Mag",
+      "description": "Archetyp transformacji, manifestacji i połączenia światów",
+      "dominant_primitives": ["SLOWO_CIALEM", "SZCZYPTA_MAGII", "ZROZUMIENIE"],
+      "suppressed_primitives": [],
+      "reconsolidation_bias": 1.0,
+      "stress_resistance": 0.8,
+      "decision_style": "transformative_synthesis",
+      "energy_level": "variable",
+      "social_orientation": "bridge_builder",
+      "time_preference": "timeless_perspective",
+      "risk_tolerance": "moderate",
+      "creativity_level": "very_high",
+      "emotional_stability": "high"
+    },
+    
+    "everyman": {
+      "name": "Zwyczajny",
+      "description": "Archetyp normalności, pragmatyzmu i życia w harmonii ze społeczeństwem",
+      "dominant_primitives": ["POSWIECENIE", "PIERWIASTEK_MILOSCI", "NADZIEJA_WYTRWALOSCI"],
+      "suppressed_primitives": ["POTEGA_PRAWDZIWEJ_WLADZY"],
+      "reconsolidation_bias": 0.5,
+      "stress_resistance": 0.6,
+      "decision_style": "community_consensus",
+      "energy_level": "moderate", 
+      "social_orientation": "community_belonging",
+      "time_preference": "present_focused",
+      "risk_tolerance": "low",
+      "creativity_level": "moderate",
+      "emotional_stability": "moderate"
+    }
+  },
+  
+  "archetype_transitions": {
+    "stress_induced": {
+      "hero_to_rebel": {
+        "trigger_stress": 0.8,
+        "conditions": ["high_cortisol", "suppressed_pfc"],
+        "description": "Bohater staje się Buntownikiem pod wpływem stresu"
+      },
+      "lover_to_innocent": {
+        "trigger_stress": 0.6,
+        "conditions": ["heartbreak", "betrayal"],
+        "description": "Kochanek cofa się w Niewinnego po zranieniu"
+      },
+      "sage_to_everyman": {
+        "trigger_stress": 0.5,
+        "conditions": ["information_overload", "decision_fatigue"],
+        "description": "Mędrzec upraszcza się do Zwyczajnego"
+      }
+    },
+    
+    "growth_induced": {
+      "innocent_to_explorer": {
+        "trigger_growth": 0.7,
+        "conditions": ["curiosity_peak", "safety_established"],
+        "description": "Niewinny rozwija się w Badacza"
+      },
+      "everyman_to_hero": {
+        "trigger_growth": 0.8,
+        "conditions": ["crisis_opportunity", "community_need"],
+        "description": "Zwyczajny staje się Bohaterem w kryzysie"
+      },
+      "explorer_to_sage": {
+        "trigger_growth": 0.6,
+        "conditions": ["wisdom_accumulation", "reflection_time"],
+        "description": "Badacz dojrzewa do Mędrca"
+      },
+      "sage_to_magician": {
+        "trigger_growth": 0.9,
+        "conditions": ["transcendence_moment", "integration_mastery"],
+        "description": "Mędrzec transcenduje w Maga"
+      }
+    }
+  },
+  
+  "migi7g_modes": {
+    "standard": {
+      "description": "Tryb standardowy - podstawowe funkcje poznawcze",
+      "default_archetype": "everyman",
+      "sekundnik_interval": 2.0,
+      "primitive_multiplier": 1.0,
+      "reconsolidation_rate": 0.1,
+      "features": ["basic_memory", "simple_emotions", "routine_decisions"]
+    },
+    
+    "enhanced": {
+      "description": "Tryb wzmocniony - podwyższona koncentracja i intuicja",
+      "default_archetype": "hero",
+      "sekundnik_interval": 1.0,
+      "primitive_multiplier": 1.3,
+      "reconsolidation_rate": 0.2,
+      "features": ["enhanced_focus", "emotional_intelligence", "strategic_thinking"]
+    },
+    
+    "meta_genius": {
+      "description": "Tryb Meta-Geniusz - maksymalna integracja wszystkich systemów",
+      "default_archetype": "magician", 
+      "sekundnik_interval": 0.5,
+      "primitive_multiplier": 1.8,
+      "reconsolidation_rate": 0.4,
+      "features": ["transcendental_awareness", "unlimited_creativity", "reality_synthesis"]
+    }
+  },
+  
+  "brain_layer_integration": {
+    "reptilian_core": {
+      "functions": ["survival", "breathing", "heart_rate", "fight_flight"],
+      "dominant_hormones": ["adrenaline", "noradrenaline", "cortisol"],
+      "response_time": 0.1,
+      "priority_level": "critical"
+    },
+    
+    "limbic_system": {
+      "functions": ["emotions", "memory_formation", "social_bonding", "reward_processing"],
+      "dominant_hormones": ["dopamine", "oxytocin", "serotonin"],
+      "response_time": 0.5,
+      "priority_level": "high"
+    },
+    
+    "neocortex": {
+      "functions": ["reasoning", "language", "planning", "abstract_thinking"],
+      "dominant_hormones": ["acetylcholine", "dopamine"],
+      "response_time": 2.0,
+      "priority_level": "medium"
+    },
+    
+    "meta_consciousness": {
+      "functions": ["self_awareness", "transcendence", "integration", "wisdom"],
+      "dominant_hormones": ["endorphins", "serotonin"],
+      "response_time": 5.0,
+      "priority_level": "transcendent"
+    }
+  }
+}

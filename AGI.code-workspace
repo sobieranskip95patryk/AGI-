@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../mnt"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "AGI",
+		"liveServer.settings.port": 5502
+	}
+}

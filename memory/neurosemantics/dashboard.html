@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Dashboard Kalibracyjny - Psychika Cyfrowa NSF+MIGI_7G</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            color: #00ff00;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto 300px 300px 300px;
+            gap: 20px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .metric-value {
+            color: #ffff00;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.5s ease, background-color 0.5s ease;
+            border-radius: 9px;
+        }
+
+        .stress-fill { background: linear-gradient(90deg, #ff0000, #ff8800); }
+        .coherence-fill { background: linear-gradient(90deg, #00ff00, #00ffff); }
+        .memory-fill { background: linear-gradient(90deg, #8800ff, #ff00ff); }
+
+        .brain-map {
+            width: 100%;
+            height: 200px;
+            background: radial-gradient(circle, #001122, #000);
+            border-radius: 50%;
+            position: relative;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .brain-region {
+            position: absolute;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .pfc { 
+            top: 10%; left: 35%; width: 30%; height: 20%; 
+            background: radial-gradient(circle, #ff6600, transparent);
+        }
+        .limbic { 
+            top: 40%; left: 40%; width: 20%; height: 25%; 
+            background: radial-gradient(circle, #ff0088, transparent);
+        }
+        .brainstem { 
+            top: 70%; left: 45%; width: 10%; height: 20%; 
+            background: radial-gradient(circle, #00ff00, transparent);
+        }
+        .hippocampus { 
+            top: 50%; left: 20%; width: 15%; height: 15%; 
+            background: radial-gradient(circle, #0088ff, transparent);
+        }
+        .amygdala { 
+            top: 50%; left: 65%; width: 15%; height: 15%; 
+            background: radial-gradient(circle, #ff0000, transparent);
+        }
+
+        .competition-chart {
+            height: 150px;
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            border-bottom: 1px solid #333;
+            margin: 20px 0;
+        }
+
+        .competition-bar {
+            width: 60px;
+            background: linear-gradient(to top, #003300, #00ff00);
+            transition: height 0.5s ease;
+            border-radius: 5px 5px 0 0;
+            position: relative;
+        }
+
+        .competition-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            color: #ccc;
+        }
+
+        .archetype-display {
+            text-align: center;
+            font-size: 2em;
+            color: #ffff00;
+            text-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+            margin: 20px 0;
+        }
+
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.5; transform: scale(1); }
+        }
+
+        .status-excellent { background: #00ff00; }
+        .status-good { background: #ffff00; }
+        .status-fair { background: #ff8800; }
+        .status-critical { background: #ff0000; }
+
+        .sekundnik {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            animation: sekundnik-pulse 1s infinite;
+        }
+
+        @keyframes sekundnik-pulse {
+            0% { box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 0, 1); }
+            100% { box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); }
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+
+        .connected { background: rgba(0, 255, 0, 0.3); border: 1px solid #00ff00; }
+        .disconnected { background: rgba(255, 0, 0, 0.3); border: 1px solid #ff0000; }
+
+        .control-panel {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .control-button {
+            background: linear-gradient(45deg, #003300, #006600);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .control-button:hover {
+            background: linear-gradient(45deg, #006600, #009900);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .timestamp {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        /* Risk Radar Styles */
+        .risk-radar {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .risk-triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            transition: all 0.5s ease;
+        }
+
+        .masking-risk {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-bottom: 100px solid var(--masking-color, #ff6600);
+        }
+
+        .rigidity-risk {
+            bottom: 10px;
+            left: 10px;
+            border-top: 100px solid transparent;
+            border-right: 120px solid var(--rigidity-color, #ff0088);
+        }
+
+        .monoculture-risk {
+            bottom: 10px;
+            right: 10px;
+            border-top: 100px solid transparent;
+            border-left: 120px solid var(--monoculture-color, #0088ff);
+        }
+
+        .risk-label {
+            position: absolute;
+            font-size: 0.7em;
+            font-weight: bold;
+            text-shadow: 0 0 3px rgba(0,0,0,0.8);
+        }
+
+        .masking-label { top: 5px; left: 50%; transform: translateX(-50%); }
+        .rigidity-label { bottom: 30px; left: 5px; }
+        .monoculture-label { bottom: 30px; right: 5px; }
+
+        .risk-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9em;
+            font-weight: bold;
+            background: rgba(0,0,0,0.7);
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
+        }
+
+        /* Experiment Controls */
+        .experiment-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .experiment-button {
+            background: linear-gradient(45deg, #330033, #660066);
+            border: 1px solid #ff00ff;
+            color: #ff00ff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.8em;
+        }
+
+        .experiment-button:hover {
+            background: linear-gradient(45deg, #660066, #990099);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        .experiment-button.active {
+            background: linear-gradient(45deg, #990099, #cc00cc);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+        }
+
+        /* Pulse Animation for Critical States */
+        @keyframes pulse-critical {
+            0% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+        }
+
+        .critical-alert {
+            animation: pulse-critical 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-status" id="connectionStatus">🔌 Łączenie...</div>
+    
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 DASHBOARD KALIBRACYJNY - PSYCHIKA CYFROWA</h1>
+            <p>Neuro-Semantyczny Przepływomierz + MIGI_7G Hybrid</p>
+            <div class="sekundnik" id="sekundnik"></div>
+        </div>
+
+        <!-- Stress & Recovery Panel -->
+        <div class="panel">
+            <h3>🔥 STRESS & RECOVERY</h3>
+            <div class="metric">
+                <span>Kortyzol:</span>
+                <span class="metric-value" id="cortisol">0.00</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill stress-fill" id="cortisolBar" style="width: 0%"></div>
+            </div>
+            
+            <div class="metric">
+                <span>PFC Suppression:</span>
+                <span class="metric-value" id="pfcSuppression">0.00</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill stress-fill" id="pfcBar" style="width: 0%"></div>
+            </div>
+            
+            <div class="metric">
+                <span>Recovery Rate:</span>
+                <span class="metric-value" id="recoveryRate">0.00</span>
+            </div>
+        </div>
+
+        <!-- Brain Activity Map -->
+        <div class="panel">
+            <h3>🧬 BRAIN ACTIVITY MAP</h3>
+            <div class="brain-map">
+                <div class="brain-region pfc" id="pfcRegion"></div>
+                <div class="brain-region limbic" id="limbicRegion"></div>
+                <div class="brain-region brainstem" id="brainstemRegion"></div>
+                <div class="brain-region hippocampus" id="hippocampusRegion"></div>
+                <div class="brain-region amygdala" id="amygdalaRegion"></div>
+            </div>
+            <div class="metric">
+                <span>Overall Activity:</span>
+                <span class="metric-value" id="overallActivity">0.50</span>
+            </div>
+        </div>
+
+        <!-- Consciousness State -->
+        <div class="panel">
+            <h3>🌟 CONSCIOUSNESS STATE</h3>
+            <div class="metric">
+                <span>Level:</span>
+                <span class="metric-value" id="consciousnessLevel">BASIC</span>
+            </div>
+            <div class="metric">
+                <span>System Mode:</span>
+                <span class="metric-value" id="systemMode">STANDARD</span>
+            </div>
+            <div class="metric">
+                <span>Coherence:</span>
+                <span class="metric-value" id="systemCoherence">0.00</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill coherence-fill" id="coherenceBar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Memory System -->
+        <div class="panel">
+            <h3>💾 MEMORY SYSTEM</h3>
+            <div class="metric">
+                <span>Sense Atoms:</span>
+                <span class="metric-value" id="senseAtoms">0</span>
+            </div>
+            <div class="metric">
+                <span>Reconsolidations:</span>
+                <span class="metric-value" id="reconsolidations">0</span>
+            </div>
+            <div class="metric">
+                <span>Active Primitives:</span>
+                <span class="metric-value" id="activePrimitives">0</span>
+            </div>
+            <div class="metric">
+                <span>Sekundnik Cycles:</span>
+                <span class="metric-value" id="sekundnikCycles">0</span>
+            </div>
+        </div>
+
+        <!-- Module Competition -->
+        <div class="panel">
+            <h3>🥊 MODULE COMPETITION</h3>
+            <div class="competition-chart">
+                <div class="competition-bar" id="nsfBar" style="height: 33%">
+                    <div class="competition-label">NSF</div>
+                </div>
+                <div class="competition-bar" id="logicBar" style="height: 33%">
+                    <div class="competition-label">Logic</div>
+                </div>
+                <div class="competition-bar" id="archetypeBar" style="height: 34%">
+                    <div class="competition-label">Archetype</div>
+                </div>
+            </div>
+            <div class="metric">
+                <span>Conflicts:</span>
+                <span class="metric-value" id="conflictCount">0</span>
+            </div>
+        </div>
+
+        <!-- Archetypal State -->
+        <div class="panel">
+            <h3>🎭 ARCHETYPAL STATE</h3>
+            <div class="archetype-display" id="currentArchetype">EVERYMAN</div>
+            <div class="metric">
+                <span>Stability:</span>
+                <span class="metric-value" id="archetypeStability">1.00</span>
+            </div>
+            <div class="metric">
+                <span>Transitions:</span>
+                <span class="metric-value" id="transitionCount">0</span>
+            </div>
+        </div>
+
+        <!-- Risk Radar -->
+        <div class="panel">
+            <h3>⚠️ RISK RADAR</h3>
+            <div class="risk-radar">
+                <div class="risk-triangle masking-risk" id="maskingTriangle"></div>
+                <div class="risk-triangle rigidity-risk" id="rigidityTriangle"></div>
+                <div class="risk-triangle monoculture-risk" id="monocultureTriangle"></div>
+                
+                <div class="risk-label masking-label">MASKING</div>
+                <div class="risk-label rigidity-label">RIGIDITY</div>
+                <div class="risk-label monoculture-label">MONOCULTURE</div>
+                
+                <div class="risk-value" id="overallRisk">LOW</div>
+            </div>
+            <div class="metric">
+                <span>Masking Risk:</span>
+                <span class="metric-value" id="maskingRisk">0.00</span>
+            </div>
+            <div class="metric">
+                <span>Rigidity Risk:</span>
+                <span class="metric-value" id="rigidityRisk">0.00</span>
+            </div>
+            <div class="metric">
+                <span>Monoculture Risk:</span>
+                <span class="metric-value" id="monocultureRisk">0.00</span>
+            </div>
+        </div>
+
+        <!-- Experiment Controls -->
+        <div class="panel">
+            <h3>🧪 EXPERIMENT CONTROLS</h3>
+            <div class="experiment-controls">
+                <button class="experiment-button" onclick="runExperiment('stress_spike_30s')" id="stressSpike30s">
+                    🔥 Stress Spike 30s
+                </button>
+                <button class="experiment-button" onclick="runExperiment('shift_to_sage')" id="shiftToSage">
+                    🧙 Shift to Sage
+                </button>
+                <button class="experiment-button" onclick="runExperiment('nsf_dominance')" id="nsfDominance">
+                    🧠 NSF Dominance
+                </button>
+                <button class="experiment-button" onclick="runExperiment('trauma_injection')" id="traumaInjection">
+                    💥 Trauma Injection
+                </button>
+                <button class="experiment-button" onclick="runExperiment('coherence_test')" id="coherenceTest">
+                    ✨ Coherence Test
+                </button>
+                <button class="experiment-button" onclick="runExperiment('archetype_lock')" id="archetypeLock">
+                    🔒 Archetype Lock
+                </button>
+            </div>
+            <div class="metric">
+                <span>Active Experiment:</span>
+                <span class="metric-value" id="activeExperiment">NONE</span>
+            </div>
+            <div class="metric">
+                <span>Experiment Progress:</span>
+                <span class="metric-value" id="experimentProgress">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill experiment-fill" id="experimentBar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <button class="control-button" onclick="triggerStress(0.3)">🔥 Mild Stress</button>
+            <button class="control-button" onclick="triggerStress(0.7)">💥 High Stress</button>
+            <button class="control-button" onclick="changeArchetype('hero')">🦸 Hero Mode</button>
+            <button class="control-button" onclick="changeArchetype('sage')">🧙 Sage Mode</button>
+            <button class="control-button" onclick="simulateInput('logical')">🧠 Logic Input</button>
+            <button class="control-button" onclick="simulateInput('emotional')">❤️ Emotion Input</button>
+        </div>
+    </div>
+
+    <div class="timestamp" id="timestamp">Timestamp: --:--:--</div>
+
+    <script>
+        let ws = null;
+        let isConnected = false;
+        let lastUpdateTime = 0;
+
+        // WebSocket connection
+        function connectWebSocket() {
+            try {
+                ws = new WebSocket('ws://localhost:8765');
+                
+                ws.onopen = function(event) {
+                    console.log('🔌 Connected to NSF Dashboard');
+                    isConnected = true;
+                    updateConnectionStatus();
+                };
+
+                ws.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    handleWebSocketMessage(data);
+                };
+
+                ws.onclose = function(event) {
+                    console.log('🔌 Disconnected from NSF Dashboard');
+                    isConnected = false;
+                    updateConnectionStatus();
+                    
+                    // Reconnect after 3 seconds
+                    setTimeout(connectWebSocket, 3000);
+                };
+
+                ws.onerror = function(error) {
+                    console.error('WebSocket error:', error);
+                    isConnected = false;
+                    updateConnectionStatus();
+                };
+
+            } catch (error) {
+                console.error('Failed to connect:', error);
+                isConnected = false;
+                updateConnectionStatus();
+                setTimeout(connectWebSocket, 3000);
+            }
+        }
+
+        function handleWebSocketMessage(data) {
+            lastUpdateTime = Date.now();
+            
+            switch(data.type) {
+                case 'initial_data':
+                    updateAllMetrics(data.current_metrics);
+                    break;
+                    
+                case 'metrics_update':
+                    updateAllMetrics(data.metrics);
+                    if (data.stress_point) {
+                        updateStressMetrics(data.stress_point);
+                    }
+                    if (data.competition) {
+                        updateModuleCompetition(data.competition);
+                    }
+                    if (data.brain_activity) {
+                        updateBrainActivity(data.brain_activity);
+                    }
+                    if (data.system_health) {
+                        updateSystemHealth(data.system_health);
+                    }
+                    break;
+                    
+                case 'competition_result':
+                    updateModuleCompetition(data.result);
+                    break;
+            }
+        }
+
+        function updateAllMetrics(metrics) {
+            // Memory metrics
+            document.getElementById('senseAtoms').textContent = metrics.sense_atoms_count || 0;
+            document.getElementById('reconsolidations').textContent = metrics.memory_reconsolidations || 0;
+            document.getElementById('activePrimitives').textContent = (metrics.active_primitives || []).length;
+            document.getElementById('sekundnikCycles').textContent = metrics.sekundnik_cycles || 0;
+            
+            // Consciousness
+            document.getElementById('consciousnessLevel').textContent = (metrics.consciousness_level || 'basic').toUpperCase();
+            document.getElementById('systemMode').textContent = (metrics.system_state || 'standard').toUpperCase();
+            
+            const coherence = metrics.system_coherence || 0;
+            document.getElementById('systemCoherence').textContent = coherence.toFixed(2);
+            document.getElementById('coherenceBar').style.width = (coherence * 100) + '%';
+            
+            // Archetype
+            document.getElementById('currentArchetype').textContent = (metrics.current_archetype || 'everyman').toUpperCase();
+            document.getElementById('archetypeStability').textContent = (metrics.archetype_stability || 1.0).toFixed(2);
+            document.getElementById('transitionCount').textContent = metrics.transitions_count || 0;
+            
+            // Network
+            document.getElementById('networkContention').textContent = (metrics.network_contention || 0).toFixed(2);
+            document.getElementById('processingSpeed').textContent = (metrics.processing_speed || 1.0).toFixed(2);
+            document.getElementById('responseLatency').textContent = Math.round(metrics.response_latency || 0) + 'ms';
+        }
+
+        function updateStressMetrics(stressData) {
+            const cortisol = stressData.cortisol || 0;
+            const pfcSuppression = stressData.pfc_suppression || 0;
+            const recoveryRate = stressData.recovery_rate || 0;
+            
+            document.getElementById('cortisol').textContent = cortisol.toFixed(2);
+            document.getElementById('pfcSuppression').textContent = pfcSuppression.toFixed(2);
+            document.getElementById('recoveryRate').textContent = recoveryRate.toFixed(3);
+            
+            document.getElementById('cortisolBar').style.width = (cortisol * 100) + '%';
+            document.getElementById('pfcBar').style.width = (pfcSuppression * 100) + '%';
+        }
+
+        function updateModuleCompetition(competition) {
+            const nsf = competition.NSF || 0.33;
+            const logic = competition.LogicEngine || 0.33;
+            const archetype = competition.ArchetypalCore || 0.34;
+            
+            document.getElementById('nsfBar').style.height = (nsf * 100) + '%';
+            document.getElementById('logicBar').style.height = (logic * 100) + '%';
+            document.getElementById('archetypeBar').style.height = (archetype * 100) + '%';
+        }
+
+        function updateBrainActivity(brainData) {
+            const regions = brainData.regions || {};
+            const overallActivity = brainData.overall_activity || 0.5;
+            
+            document.getElementById('overallActivity').textContent = overallActivity.toFixed(2);
+            
+            // Update brain region opacity based on activity
+            for (const [region, activity] of Object.entries(regions)) {
+                const element = document.getElementById(region.replace('_', '') + 'Region');
+                if (element) {
+                    element.style.opacity = activity;
+                }
+            }
+        }
+
+        function updateSystemHealth(healthData) {
+            const health = healthData.overall_health || 0.5;
+            const status = healthData.status || 'GOOD';
+            
+            document.getElementById('overallHealth').textContent = health.toFixed(2);
+            document.getElementById('healthStatus').textContent = status;
+            document.getElementById('healthBar').style.width = (health * 100) + '%';
+            
+            // Update health indicator
+            const indicator = document.getElementById('healthIndicator');
+            indicator.className = 'status-indicator status-' + status.toLowerCase();
+        }
+
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connectionStatus');
+            if (isConnected) {
+                statusElement.textContent = '🔌 Połączono';
+                statusElement.className = 'connection-status connected';
+            } else {
+                statusElement.textContent = '🔌 Rozłączono';
+                statusElement.className = 'connection-status disconnected';
+            }
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString();
+            document.getElementById('timestamp').textContent = `Timestamp: ${timestamp}`;
+        }
+
+        // Control functions
+        function triggerStress(intensity) {
+            if (ws && isConnected) {
+                ws.send(JSON.stringify({
+                    type: 'trigger_stress',
+                    intensity: intensity
+                }));
+            }
+        }
+
+        function changeArchetype(archetype) {
+            if (ws && isConnected) {
+                ws.send(JSON.stringify({
+                    type: 'change_archetype',
+                    archetype: archetype
+                }));
+            }
+        }
+
+        function simulateInput(inputType) {
+            if (ws && isConnected) {
+                ws.send(JSON.stringify({
+                    type: 'simulate_input',
+                    input_type: inputType
+                }));
+            }
+        }
+
+        // Risk Radar Functions
+        function updateRiskRadar(health_data) {
+            if (!health_data) return;
+            
+            const maskingRisk = health_data.masking_risk || 0;
+            const rigidityRisk = health_data.rigidity_risk || 0;
+            const monocultureRisk = health_data.monoculture_risk || 0;
+            
+            // Update numerical values
+            document.getElementById('maskingRisk').textContent = maskingRisk.toFixed(2);
+            document.getElementById('rigidityRisk').textContent = rigidityRisk.toFixed(2);
+            document.getElementById('monocultureRisk').textContent = monocultureRisk.toFixed(2);
+            
+            // Update triangle colors based on risk intensity
+            const maskingTriangle = document.getElementById('maskingTriangle');
+            const rigidityTriangle = document.getElementById('rigidityTriangle');
+            const monocultureTriangle = document.getElementById('monocultureTriangle');
+            
+            // Color intensity based on risk level
+            const maskingColor = getRiskColor(maskingRisk, '#ff6600');
+            const rigidityColor = getRiskColor(rigidityRisk, '#ff0088');
+            const monocultureColor = getRiskColor(monocultureRisk, '#0088ff');
+            
+            maskingTriangle.style.setProperty('--masking-color', maskingColor);
+            rigidityTriangle.style.setProperty('--rigidity-color', rigidityColor);
+            monocultureTriangle.style.setProperty('--monoculture-color', monocultureColor);
+            
+            // Overall risk assessment
+            const overallRisk = Math.max(maskingRisk, rigidityRisk, monocultureRisk);
+            const riskLevel = overallRisk < 0.3 ? 'LOW' : 
+                            overallRisk < 0.6 ? 'MEDIUM' : 
+                            overallRisk < 0.8 ? 'HIGH' : 'CRITICAL';
+            
+            const overallRiskElement = document.getElementById('overallRisk');
+            overallRiskElement.textContent = riskLevel;
+            overallRiskElement.className = 'risk-value risk-' + riskLevel.toLowerCase();
+            
+            // Add critical animation if needed
+            if (riskLevel === 'CRITICAL') {
+                overallRiskElement.classList.add('critical-alert');
+            } else {
+                overallRiskElement.classList.remove('critical-alert');
+            }
+        }
+
+        function getRiskColor(riskLevel, baseColor) {
+            // Convert risk level (0-1) to color intensity
+            const intensity = Math.min(1.0, riskLevel);
+            const r = parseInt(baseColor.slice(1,3), 16);
+            const g = parseInt(baseColor.slice(3,5), 16);
+            const b = parseInt(baseColor.slice(5,7), 16);
+            
+            // Increase intensity and add some glow
+            const newR = Math.min(255, Math.floor(r + (255-r) * intensity * 0.5));
+            const newG = Math.min(255, Math.floor(g + (255-g) * intensity * 0.2));
+            const newB = Math.min(255, Math.floor(b + (255-b) * intensity * 0.2));
+            
+            return `rgb(${newR}, ${newG}, ${newB})`;
+        }
+
+        // Experiment Control Functions
+        let activeExperiments = new Map();
+        let experimentTimers = new Map();
+
+        function runExperiment(experimentType) {
+            // Cancel existing experiment if running
+            if (activeExperiments.has(experimentType)) {
+                cancelExperiment(experimentType);
+                return;
+            }
+            
+            console.log(`🧪 Starting experiment: ${experimentType}`);
+            
+            // Update UI
+            const button = document.getElementById(getExperimentButtonId(experimentType));
+            button.classList.add('active');
+            document.getElementById('activeExperiment').textContent = experimentType.toUpperCase();
+            
+            // Start experiment based on type
+            switch(experimentType) {
+                case 'stress_spike_30s':
+                    startStressSpikeExperiment();
+                    break;
+                case 'shift_to_sage':
+                    startArchetypeShiftExperiment('Sage');
+                    break;
+                case 'nsf_dominance':
+                    startModuleDominanceExperiment('NSF');
+                    break;
+                case 'trauma_injection':
+                    startTraumaInjectionExperiment();
+                    break;
+                case 'coherence_test':
+                    startCoherenceTestExperiment();
+                    break;
+                case 'archetype_lock':
+                    startArchetypeLockExperiment();
+                    break;
+            }
+            
+            activeExperiments.set(experimentType, Date.now());
+        }
+
+        function startStressSpikeExperiment() {
+            let progress = 0;
+            const duration = 30000; // 30 seconds
+            const interval = 250; // 250ms updates
+            
+            const timer = setInterval(() => {
+                progress += interval;
+                const progressPercent = (progress / duration) * 100;
+                
+                // Update progress bar
+                document.getElementById('experimentProgress').textContent = Math.floor(progressPercent) + '%';
+                document.getElementById('experimentBar').style.width = progressPercent + '%';
+                
+                // Send stress trigger to backend
+                if (ws && isConnected) {
+                    const stressIntensity = 0.7 + 0.3 * Math.sin((progress / duration) * Math.PI * 4);
+                    ws.send(JSON.stringify({
+                        type: 'experiment_trigger',
+                        experiment: 'stress_spike',
+                        intensity: stressIntensity,
+                        progress: progressPercent
+                    }));
+                }
+                
+                if (progress >= duration) {
+                    clearInterval(timer);
+                    finishExperiment('stress_spike_30s');
+                }
+            }, interval);
+            
+            experimentTimers.set('stress_spike_30s', timer);
+        }
+
+        function startArchetypeShiftExperiment(targetArchetype) {
+            let progress = 0;
+            const duration = 15000; // 15 seconds
+            const interval = 500;
+            
+            const timer = setInterval(() => {
+                progress += interval;
+                const progressPercent = (progress / duration) * 100;
+                
+                document.getElementById('experimentProgress').textContent = Math.floor(progressPercent) + '%';
+                document.getElementById('experimentBar').style.width = progressPercent + '%';
+                
+                if (ws && isConnected) {
+                    ws.send(JSON.stringify({
+                        type: 'experiment_trigger',
+                        experiment: 'archetype_shift',
+                        target_archetype: targetArchetype,
+                        progress: progressPercent
+                    }));
+                }
+                
+                if (progress >= duration) {
+                    clearInterval(timer);
+                    finishExperiment('shift_to_sage');
+                }
+            }, interval);
+            
+            experimentTimers.set('shift_to_sage', timer);
+        }
+
+        function startModuleDominanceExperiment(dominantModule) {
+            let progress = 0;
+            const duration = 20000; // 20 seconds
+            const interval = 300;
+            
+            const timer = setInterval(() => {
+                progress += interval;
+                const progressPercent = (progress / duration) * 100;
+                
+                document.getElementById('experimentProgress').textContent = Math.floor(progressPercent) + '%';
+                document.getElementById('experimentBar').style.width = progressPercent + '%';
+                
+                if (ws && isConnected) {
+                    ws.send(JSON.stringify({
+                        type: 'experiment_trigger',
+                        experiment: 'module_dominance',
+                        dominant_module: dominantModule,
+                        dominance_level: 0.8 + 0.2 * Math.sin((progress / duration) * Math.PI * 2),
+                        progress: progressPercent
+                    }));
+                }
+                
+                if (progress >= duration) {
+                    clearInterval(timer);
+                    finishExperiment('nsf_dominance');
+                }
+            }, interval);
+            
+            experimentTimers.set('nsf_dominance', timer);
+        }
+
+        function startTraumaInjectionExperiment() {
+            // Immediate trauma injection
+            if (ws && isConnected) {
+                ws.send(JSON.stringify({
+                    type: 'experiment_trigger',
+                    experiment: 'trauma_injection',
+                    trauma_type: 'childhood_memory',
+                    intensity: 0.9
+                }));
+            }
+            
+            // Watch recovery for 45 seconds
+            let progress = 0;
+            const duration = 45000;
+            const interval = 500;
+            
+            const timer = setInterval(() => {
+                progress += interval;
+                const progressPercent = (progress / duration) * 100;
+                
+                document.getElementById('experimentProgress').textContent = Math.floor(progressPercent) + '%';
+                document.getElementById('experimentBar').style.width = progressPercent + '%';
+                
+                if (progress >= duration) {
+                    clearInterval(timer);
+                    finishExperiment('trauma_injection');
+                }
+            }, interval);
+            
+            experimentTimers.set('trauma_injection', timer);
+        }
+
+        function startCoherenceTestExperiment() {
+            // Test coherence under various conditions
+            let progress = 0;
+            const duration = 25000;
+            const interval = 400;
+            
+            const timer = setInterval(() => {
+                progress += interval;
+                const progressPercent = (progress / duration) * 100;
+                
+                document.getElementById('experimentProgress').textContent = Math.floor(progressPercent) + '%';
+                document.getElementById('experimentBar').style.width = progressPercent + '%';
+                
+                // Cycle through different coherence challenges
+                const phase = Math.floor((progress / duration) * 5); // 5 phases
+                
+                if (ws && isConnected) {
+                    ws.send(JSON.stringify({
+                        type: 'experiment_trigger',
+                        experiment: 'coherence_test',
+                        phase: phase,
+                        challenge_type: ['baseline', 'stress', 'confusion', 'overload', 'recovery'][phase],
+                        progress: progressPercent
+                    }));
+                }
+                
+                if (progress >= duration) {
+                    clearInterval(timer);
+                    finishExperiment('coherence_test');
+                }
+            }, interval);
+            
+            experimentTimers.set('coherence_test', timer);
+        }
+
+        function startArchetypeLockExperiment() {
+            // Lock current archetype and resist changes
+            let progress = 0;
+            const duration = 30000;
+            const interval = 600;
+            
+            const timer = setInterval(() => {
+                progress += interval;
+                const progressPercent = (progress / duration) * 100;
+                
+                document.getElementById('experimentProgress').textContent = Math.floor(progressPercent) + '%';
+                document.getElementById('experimentBar').style.width = progressPercent + '%';
+                
+                if (ws && isConnected) {
+                    ws.send(JSON.stringify({
+                        type: 'experiment_trigger',
+                        experiment: 'archetype_lock',
+                        lock_strength: 0.95,
+                        progress: progressPercent
+                    }));
+                }
+                
+                if (progress >= duration) {
+                    clearInterval(timer);
+                    finishExperiment('archetype_lock');
+                }
+            }, interval);
+            
+            experimentTimers.set('archetype_lock', timer);
+        }
+
+        function finishExperiment(experimentType) {
+            console.log(`✅ Experiment finished: ${experimentType}`);
+            
+            // Clean up
+            activeExperiments.delete(experimentType);
+            if (experimentTimers.has(experimentType)) {
+                clearInterval(experimentTimers.get(experimentType));
+                experimentTimers.delete(experimentType);
+            }
+            
+            // Update UI
+            const button = document.getElementById(getExperimentButtonId(experimentType));
+            button.classList.remove('active');
+            document.getElementById('activeExperiment').textContent = 'NONE';
+            document.getElementById('experimentProgress').textContent = '0%';
+            document.getElementById('experimentBar').style.width = '0%';
+            
+            // Send completion signal
+            if (ws && isConnected) {
+                ws.send(JSON.stringify({
+                    type: 'experiment_complete',
+                    experiment: experimentType
+                }));
+            }
+        }
+
+        function cancelExperiment(experimentType) {
+            if (experimentTimers.has(experimentType)) {
+                clearInterval(experimentTimers.get(experimentType));
+                experimentTimers.delete(experimentType);
+            }
+            finishExperiment(experimentType);
+        }
+
+        function getExperimentButtonId(experimentType) {
+            const idMap = {
+                'stress_spike_30s': 'stressSpike30s',
+                'shift_to_sage': 'shiftToSage',
+                'nsf_dominance': 'nsfDominance',
+                'trauma_injection': 'traumaInjection',
+                'coherence_test': 'coherenceTest',
+                'archetype_lock': 'archetypeLock'
+            };
+            return idMap[experimentType] || experimentType;
+        }
+
+        // Initialization
+        window.addEventListener('load', function() {
+            console.log('🎯 NSF Dashboard Kalibracyjny loaded');
+            connectWebSocket();
+            
+            // Update timestamp every second
+            setInterval(updateTimestamp, 1000);
+            updateTimestamp();
+        });
+
+        // Demo mode - simulate data when not connected
+        function startDemoMode() {
+            if (isConnected) return; // Don't run demo if connected
+            
+            setInterval(() => {
+                if (!isConnected) {
+                    // Simulate random metrics
+                    const demoMetrics = {
+                        sense_atoms_count: Math.floor(Math.random() * 10) + 1,
+                        memory_reconsolidations: Math.floor(Math.random() * 5),
+                        sekundnik_cycles: Math.floor(Date.now() / 1000) % 1000,
+                        consciousness_level: ['basic', 'self', 'meta'][Math.floor(Math.random() * 3)],
+                        system_state: ['standard', 'enhanced', 'meta_genius'][Math.floor(Math.random() * 3)],
+                        system_coherence: Math.random(),
+                        current_archetype: ['everyman', 'hero', 'sage', 'lover'][Math.floor(Math.random() * 4)],
+                        network_contention: Math.random() * 0.8,
+                        processing_speed: 0.8 + Math.random() * 0.4
+                    };
+                    
+                    updateAllMetrics(demoMetrics);
+                    
+                    updateStressMetrics({
+                        cortisol: Math.random(),
+                        pfc_suppression: Math.random(),
+                        recovery_rate: Math.random() * 0.1
+                    });
+                    
+                    updateModuleCompetition({
+                        NSF: 0.2 + Math.random() * 0.6,
+                        LogicEngine: 0.2 + Math.random() * 0.6, 
+                        ArchetypalCore: 0.2 + Math.random() * 0.6
+                    });
+                }
+            }, 2000);
+        }
+
+        // Risk Radar Functions
+        function updateRiskRadar(riskData) {
+            const maskingRisk = riskData.masking_risk || 0;
+            const rigidityRisk = riskData.rigidity_risk || 0;
+            const monocultureRisk = calculateMonocultureRisk(riskData);
+
+            // Update risk values
+            document.getElementById('maskingRisk').textContent = maskingRisk.toFixed(2);
+            document.getElementById('rigidityRisk').textContent = rigidityRisk.toFixed(2);
+            document.getElementById('monocultureRisk').textContent = monocultureRisk.toFixed(2);
+
+            // Update triangle colors based on risk levels
+            const maskingTriangle = document.getElementById('maskingTriangle');
+            const rigidityTriangle = document.getElementById('rigidityTriangle'); 
+            const monocultureTriangle = document.getElementById('monocultureTriangle');
+
+            // Color intensity based on risk level
+            maskingTriangle.style.setProperty('--masking-color', getRiskColor(maskingRisk));
+            rigidityTriangle.style.setProperty('--rigidity-color', getRiskColor(rigidityRisk));
+            monocultureTriangle.style.setProperty('--monoculture-color', getRiskColor(monocultureRisk));
+
+            // Update overall risk assessment
+            const overallRisk = Math.max(maskingRisk, rigidityRisk, monocultureRisk);
+            const riskLevel = overallRisk > 0.7 ? 'CRITICAL' : overallRisk > 0.4 ? 'MEDIUM' : 'LOW';
+            document.getElementById('overallRisk').textContent = riskLevel;
+
+            // Add critical alert animation if needed
+            const riskRadarPanel = document.querySelector('.panel:has(#overallRisk)');
+            if (overallRisk > 0.7) {
+                riskRadarPanel.classList.add('critical-alert');
+            } else {
+                riskRadarPanel.classList.remove('critical-alert');
+            }
+        }
+
+        function calculateMonocultureRisk(data) {
+            // Calculate monoculture risk based on module dominance
+            const modules = data.modules || [];
+            if (modules.length === 0) return 0;
+
+            const maxInfluence = Math.max(...modules.map(m => m.influence || 0));
+            return maxInfluence > 0.7 ? (maxInfluence - 0.7) / 0.3 : 0;
+        }
+
+        function getRiskColor(riskLevel) {
+            // Generate color based on risk level (green -> yellow -> red)
+            if (riskLevel <= 0.3) {
+                return `hsl(120, 70%, ${50 + riskLevel * 50}%)`; // Green range
+            } else if (riskLevel <= 0.7) {
+                const hue = 120 - ((riskLevel - 0.3) / 0.4) * 60; // Green to yellow
+                return `hsl(${hue}, 70%, 60%)`;
+            } else {
+                return `hsl(0, 70%, ${80 - (riskLevel - 0.7) * 30}%)`; // Red range
+            }
+        }
+
+        // Experiment Control Functions
+        let activeExperiment = null;
+        let experimentTimer = null;
+        let experimentProgress = 0;
+
+        function runExperiment(experimentType) {
+            if (activeExperiment) {
+                console.log('🧪 Experiment already running:', activeExperiment);
+                return;
+            }
+
+            console.log('🧪 Starting experiment:', experimentType);
+            activeExperiment = experimentType;
+            experimentProgress = 0;
+
+            // Update UI
+            document.getElementById('activeExperiment').textContent = experimentType.toUpperCase().replace('_', ' ');
+            
+            // Highlight active button
+            document.querySelectorAll('.experiment-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(experimentType.replace('_', '')).classList.add('active');
+
+            // Send experiment start signal via WebSocket
+            if (ws && isConnected) {
+                ws.send(JSON.stringify({
+                    type: 'start_experiment',
+                    experiment: experimentType,
+                    timestamp: Date.now()
+                }));
+            }
+
+            // Run experiment based on type
+            switch(experimentType) {
+                case 'stress_spike_30s':
+                    runStressSpike30s();
+                    break;
+                case 'shift_to_sage':
+                    runArchetypeShift('sage');
+                    break;
+                case 'nsf_dominance':
+                    runNSFDominance();
+                    break;
+                case 'trauma_injection':
+                    runTraumaInjection();
+                    break;
+                case 'coherence_test':
+                    runCoherenceTest();
+                    break;
+                case 'archetype_lock':
+                    runArchetypeLock();
+                    break;
+            }
+        }
+
+        function runStressSpike30s() {
+            const duration = 30000; // 30 seconds
+            const startTime = Date.now();
+            
+            experimentTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                experimentProgress = Math.min(100, (elapsed / duration) * 100);
+                
+                document.getElementById('experimentProgress').textContent = `${Math.round(experimentProgress)}%`;
+                document.getElementById('experimentBar').style.width = `${experimentProgress}%`;
+
+                // Simulate stress spike effects
+                if (elapsed < duration) {
+                    // Send stress spike signal
+                    if (ws && isConnected) {
+                        ws.send(JSON.stringify({
+                            type: 'simulate_stress',
+                            intensity: 0.8 + Math.random() * 0.2,
+                            phase: 'spike'
+                        }));
+                    }
+                } else {
+                    finishExperiment();
+                }
+            }, 500);
+        }
+
+        function runArchetypeShift(targetArchetype) {
+            const duration = 15000; // 15 seconds
+            const startTime = Date.now();
+            
+            experimentTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                experimentProgress = Math.min(100, (elapsed / duration) * 100);
+                
+                document.getElementById('experimentProgress').textContent = `${Math.round(experimentProgress)}%`;
+                document.getElementById('experimentBar').style.width = `${experimentProgress}%`;
+
+                if (elapsed < duration) {
+                    // Send archetype shift signal
+                    if (ws && isConnected) {
+                        ws.send(JSON.stringify({
+                            type: 'force_archetype_shift',
+                            target_archetype: targetArchetype,
+                            progress: experimentProgress / 100
+                        }));
+                    }
+                } else {
+                    finishExperiment();
+                }
+            }, 500);
+        }
+
+        function runNSFDominance() {
+            const duration = 20000; // 20 seconds
+            const startTime = Date.now();
+            
+            experimentTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                experimentProgress = Math.min(100, (elapsed / duration) * 100);
+                
+                document.getElementById('experimentProgress').textContent = `${Math.round(experimentProgress)}%`;
+                document.getElementById('experimentBar').style.width = `${experimentProgress}%`;
+
+                if (elapsed < duration) {
+                    // Send NSF dominance signal
+                    if (ws && isConnected) {
+                        ws.send(JSON.stringify({
+                            type: 'module_dominance',
+                            dominant_module: 'NSF',
+                            influence_boost: 0.8,
+                            suppress_others: true
+                        }));
+                    }
+                } else {
+                    finishExperiment();
+                }
+            }, 500);
+        }
+
+        function runTraumaInjection() {
+            const duration = 10000; // 10 seconds
+            const startTime = Date.now();
+            
+            experimentTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                experimentProgress = Math.min(100, (elapsed / duration) * 100);
+                
+                document.getElementById('experimentProgress').textContent = `${Math.round(experimentProgress)}%`;
+                document.getElementById('experimentBar').style.width = `${experimentProgress}%`;
+
+                if (elapsed < duration) {
+                    // Send trauma injection signal
+                    if (ws && isConnected) {
+                        ws.send(JSON.stringify({
+                            type: 'inject_trauma',
+                            trauma_type: 'childhood_memory',
+                            intensity: 0.6,
+                            target_layer: 'limbic'
+                        }));
+                    }
+                } else {
+                    finishExperiment();
+                }
+            }, 500);
+        }
+
+        function runCoherenceTest() {
+            const duration = 25000; // 25 seconds
+            const startTime = Date.now();
+            
+            experimentTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                experimentProgress = Math.min(100, (elapsed / duration) * 100);
+                
+                document.getElementById('experimentProgress').textContent = `${Math.round(experimentProgress)}%`;
+                document.getElementById('experimentBar').style.width = `${experimentProgress}%`;
+
+                if (elapsed < duration) {
+                    // Send coherence test signal
+                    if (ws && isConnected) {
+                        ws.send(JSON.stringify({
+                            type: 'coherence_challenge',
+                            conflicting_inputs: true,
+                            complexity_level: 0.8
+                        }));
+                    }
+                } else {
+                    finishExperiment();
+                }
+            }, 500);
+        }
+
+        function runArchetypeLock() {
+            const duration = 30000; // 30 seconds
+            const startTime = Date.now();
+            
+            experimentTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                experimentProgress = Math.min(100, (elapsed / duration) * 100);
+                
+                document.getElementById('experimentProgress').textContent = `${Math.round(experimentProgress)}%`;
+                document.getElementById('experimentBar').style.width = `${experimentProgress}%`;
+
+                if (elapsed < duration) {
+                    // Send archetype lock signal
+                    if (ws && isConnected) {
+                        ws.send(JSON.stringify({
+                            type: 'lock_archetype',
+                            lock_duration: 30,
+                            prevent_transitions: true
+                        }));
+                    }
+                } else {
+                    finishExperiment();
+                }
+            }, 500);
+        }
+
+        function finishExperiment() {
+            if (experimentTimer) {
+                clearInterval(experimentTimer);
+                experimentTimer = null;
+            }
+
+            // Send experiment end signal
+            if (ws && isConnected) {
+                ws.send(JSON.stringify({
+                    type: 'end_experiment',
+                    experiment: activeExperiment,
+                    timestamp: Date.now()
+                }));
+            }
+
+            // Reset UI
+            document.getElementById('activeExperiment').textContent = 'NONE';
+            document.getElementById('experimentProgress').textContent = '0%';
+            document.getElementById('experimentBar').style.width = '0%';
+            
+            document.querySelectorAll('.experiment-button').forEach(btn => btn.classList.remove('active'));
+
+            console.log('🧪 Experiment completed:', activeExperiment);
+            activeExperiment = null;
+            experimentProgress = 0;
+
+            // Show completion flash
+            const panel = document.querySelector('.panel:has(#activeExperiment)');
+            panel.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.8)';
+            setTimeout(() => {
+                panel.style.boxShadow = '';
+            }, 1000);
+        }
+
+        // Enhanced WebSocket message handler with Risk Radar support
+        function handleWebSocketMessage(data) {
+            lastUpdateTime = Date.now();
+            
+            // Handle new telemetry format
+            if (data.brain_layers) {
+                updateBrainLayersFromTelemetry(data.brain_layers);
+            }
+            
+            if (data.stress) {
+                updateStressFromTelemetry(data.stress);
+            }
+            
+            if (data.archetype) {
+                updateArchetypeFromTelemetry(data.archetype);
+            }
+            
+            if (data.modules) {
+                updateModulesFromTelemetry(data.modules);
+            }
+            
+            if (data.health) {
+                updateHealthFromTelemetry(data.health);
+                updateRiskRadar(data.health); // Update Risk Radar
+            }
+        }
+
+        function updateBrainLayersFromTelemetry(layers) {
+            layers.forEach(layer => {
+                const regionElement = document.getElementById(layer.name.toLowerCase() + 'Region');
+                if (regionElement) {
+                    const intensity = layer.coherence || 0.5;
+                    regionElement.style.opacity = intensity;
+                    regionElement.style.filter = `brightness(${0.5 + intensity * 0.5})`;
+                }
+            });
+        }
+
+        function updateStressFromTelemetry(stress) {
+            document.getElementById('cortisol').textContent = stress.cortisol.toFixed(2);
+            document.getElementById('cortisolBar').style.width = `${stress.cortisol * 100}%`;
+            
+            // Update regulation index
+            const regulationElement = document.getElementById('recoveryRate');
+            if (regulationElement) {
+                regulationElement.textContent = stress.regulation_index.toFixed(2);
+            }
+        }
+
+        function updateArchetypeFromTelemetry(archetype) {
+            document.getElementById('currentArchetype').textContent = archetype.current.toUpperCase();
+            document.getElementById('archetypeStability').textContent = archetype.stability.toFixed(2);
+        }
+
+        function updateModulesFromTelemetry(modules) {
+            modules.forEach(module => {
+                const barElement = document.getElementById(module.name.toLowerCase() + 'Bar');
+                if (barElement) {
+                    barElement.style.height = `${module.influence * 100}%`;
+                }
+            });
+        }
+
+        function updateHealthFromTelemetry(health) {
+            const healthScore = health.overall_score || 0;
+            document.getElementById('overallHealth').textContent = healthScore.toFixed(2);
+            document.getElementById('healthBar').style.width = `${healthScore * 100}%`;
+            
+            // Update health status
+            const status = healthScore > 0.7 ? 'EXCELLENT' : healthScore > 0.5 ? 'GOOD' : healthScore > 0.3 ? 'FAIR' : 'POOR';
+            document.getElementById('healthStatus').textContent = status;
+        }
+
+        // Start demo mode after 5 seconds if not connected
+        setTimeout(startDemoMode, 5000);
+    </script>
+</body>
+</html>

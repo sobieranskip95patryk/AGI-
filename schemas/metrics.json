@@ -1,0 +1,307 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NSF + MIGI_7G Telemetry Metrics Schema",
+  "description": "Schema for Dashboard Kalibracyjny telemetry data structure",
+  "version": "1.0",
+  "type": "object",
+  "required": ["metadata", "brain_layers", "stress", "archetype", "modules", "health"],
+  
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["trace_id", "timestamp", "timestamp_iso", "mode", "version"],
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "description": "UUID for tracing this telemetry packet"
+        },
+        "timestamp": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Unix timestamp"
+        },
+        "timestamp_iso": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 formatted timestamp"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["demo", "stub", "live"],
+          "description": "Data source mode"
+        },
+        "version": {
+          "type": "string",
+          "description": "Schema version"
+        }
+      }
+    },
+    
+    "brain_layers": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "4 brain layers: Reptilian, Limbic, Neocortex, Meta",
+      "items": {
+        "type": "object",
+        "required": ["name", "coherence", "load", "entropy"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": ["Reptilian", "Limbic", "Neocortex", "Meta"]
+          },
+          "coherence": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Layer coherence [0,1]"
+          },
+          "load": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Processing load percentage [0,100]"
+          },
+          "entropy": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Information entropy [0,1]"
+          },
+          "activation": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Current activation level [0,1]"
+          }
+        }
+      }
+    },
+    
+    "stress": {
+      "type": "object",
+      "required": ["cortisol", "sympathetic", "parasympathetic", "regulation_index"],
+      "description": "Stress and autonomic nervous system metrics",
+      "properties": {
+        "cortisol": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Cortisol level normalized [0,1]"
+        },
+        "sympathetic": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Sympathetic nervous system activity [0,1]"
+        },
+        "parasympathetic": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Parasympathetic nervous system activity [0,1]"
+        },
+        "regulation_index": {
+          "type": "number",
+          "minimum": 0.0,
+          "description": "Autonomic regulation ratio (parasympathetic/sympathetic)"
+        }
+      }
+    },
+    
+    "archetype": {
+      "type": "object",
+      "required": ["current", "stability", "transition_probability"],
+      "description": "Current archetypal state and dynamics",
+      "properties": {
+        "current": {
+          "type": "string",
+          "enum": ["Hero", "Sage", "Everyman", "Explorer", "Innocent", "Rebel", "Magician", "Lover", "Jester", "Caregiver", "Creator", "Ruler"],
+          "description": "Currently active archetype"
+        },
+        "stability": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Archetype stability [0,1]"
+        },
+        "transition_probability": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Probability of archetype transition [0,1]"
+        },
+        "previous": {
+          "type": ["string", "null"],
+          "description": "Previous archetype (if transition occurred)"
+        },
+        "transition_time": {
+          "type": ["number", "null"],
+          "description": "Timestamp of last transition"
+        }
+      }
+    },
+    
+    "modules": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 10,
+      "description": "System modules and their status",
+      "items": {
+        "type": "object",
+        "required": ["name", "influence", "error_rate", "health"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Module name"
+          },
+          "influence": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Module influence on decision making [0,1]"
+          },
+          "error_rate": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Current error rate [0,1]"
+          },
+          "health": {
+            "type": "string",
+            "enum": ["OK", "DEGRADED", "FAIL"],
+            "description": "Module health status"
+          },
+          "response_time": {
+            "type": "number",
+            "minimum": 0.0,
+            "description": "Average response time in seconds"
+          }
+        }
+      }
+    },
+    
+    "health": {
+      "type": "object",
+      "required": ["overall_score", "anomalies", "coherence_integrity", "masking_risk", "rigidity_risk"],
+      "description": "Overall system health and risk assessment",
+      "properties": {
+        "overall_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Overall system health score [0,1]"
+        },
+        "anomalies": {
+          "type": "array",
+          "description": "Detected system anomalies",
+          "items": {
+            "type": "object",
+            "required": ["type", "severity", "timestamp"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["stress_spike", "low_coherence", "archetype_rigidity", "module_failure", "masking_detected"],
+                "description": "Type of anomaly"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["low", "medium", "high", "critical"],
+                "description": "Severity level"
+              },
+              "timestamp": {
+                "type": "number",
+                "description": "When the anomaly was detected"
+              },
+              "value": {
+                "type": "number",
+                "description": "Anomaly value (if applicable)"
+              },
+              "description": {
+                "type": "string",
+                "description": "Human-readable description"
+              }
+            }
+          }
+        },
+        "coherence_integrity": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Overall coherence across brain layers [0,1]"
+        },
+        "masking_risk": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Risk of false coherence (masking) [0,1]"
+        },
+        "rigidity_risk": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Risk of archetypal rigidity [0,1]"
+        }
+      }
+    }
+  },
+  
+  "additionalProperties": false,
+  
+  "definitions": {
+    "risk_levels": {
+      "type": "object",
+      "description": "Risk assessment thresholds",
+      "properties": {
+        "masking_threshold": {
+          "type": "number",
+          "default": 0.42,
+          "description": "Threshold for masking risk detection"
+        },
+        "rigidity_threshold": {
+          "type": "number", 
+          "default": 0.85,
+          "description": "Archetype stability threshold for rigidity risk"
+        },
+        "stress_spike_threshold": {
+          "type": "number",
+          "default": 0.8,
+          "description": "Cortisol level threshold for stress spike detection"
+        },
+        "low_coherence_threshold": {
+          "type": "number",
+          "default": 0.3,
+          "description": "Minimum acceptable coherence level"
+        }
+      }
+    },
+    
+    "calibration_weights": {
+      "type": "object",
+      "description": "Weights for health score calculation",
+      "properties": {
+        "coherence_weight": {
+          "type": "number",
+          "default": 0.4,
+          "description": "Weight for coherence in health score"
+        },
+        "stress_weight": {
+          "type": "number",
+          "default": 0.3,
+          "description": "Weight for stress in health score"
+        },
+        "module_weight": {
+          "type": "number",
+          "default": 0.2,
+          "description": "Weight for module health in health score"
+        },
+        "regulation_weight": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Weight for autonomic regulation in health score"
+        }
+      }
+    }
+  }
+}

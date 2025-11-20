@@ -1,0 +1,44 @@
+# pytest configuration dla TSGC Testing Framework
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --tb=short"
+testpaths = [
+    "tests",
+]
+python_files = [
+    "test_*.py",
+    "*_test.py",
+]
+python_classes = [
+    "Test*",
+    "*Test",
+    "*Tests",
+]
+python_functions = [
+    "test_*",
+]
+
+# Markers dla różnych typów testów
+markers = [
+    "unit: Unit tests dla individual components",
+    "integration: Integration tests dla complete pipeline", 
+    "performance: Performance i stress tests",
+    "slow: Tests that take longer time",
+    "medical: Medical domain specific tests"
+]
+
+# Logging configuration
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+# Test discovery
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+# Coverage configuration (optional)
+# Uncomment if pytest-cov is installed
+# addopts = "--cov=TSGC --cov-report=html --cov-report=term"
